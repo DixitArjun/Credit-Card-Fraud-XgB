@@ -9,6 +9,9 @@ st.title("🔍 Credit Card Fraud Detection")
 
 st.markdown("Enter the transaction details below to check for potential fraud.")
 
+# Threshold slider
+threshold = st.slider("Select fraud probability threshold", min_value=0.01, max_value=1.0, value=0.1, step=0.01)
+
 # Input fields
 time = st.number_input("Transaction Time", min_value=0.0)
 amount = st.number_input("Transaction Amount", min_value=0.0)
@@ -40,9 +43,10 @@ input_data = np.array([
 # Predict probability
 if st.button("Check for Fraud"):
     prob = model.predict_proba(input_data)[0][1]
-    is_fraud = prob > 0.32  # lower threshold for fewer FNs
+    is_fraud = prob > threshold
 
     st.markdown(f"**Fraud Probability:** {prob:.2f}")
+    st.markdown(f"**Threshold:** {threshold:.2f}")
     if is_fraud:
         st.error("🚨 This transaction is likely fraudulent!")
     else:
